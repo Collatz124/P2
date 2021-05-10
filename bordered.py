@@ -1,4 +1,4 @@
-# Martin Sig Nørbjerg ( 26/04/2021 )
+# Martin Sig Nørbjerg ( 10/05/2021 )
 from typing import List, Tuple
 import sympy as sp
 from lagrange import insertSymbolsAndComputeValue
@@ -30,6 +30,13 @@ def isMinimum (H: sp.Matrix, m: int, n: int) -> bool:
         if ((-1)**(m) * H.extract(list(range(k)), list(range(k))).det() <= 0): return False
     return True
 
+def isSaddlepoint (H: sp.Matrix, m: int, n: int) -> bool:
+    """ Figure out if the point (x, u) is a saddle point """
+    for k in range(2*m + 1, m + n + 1):
+        # Test each submatrix (extract, takes a list of columns and rows and produces a submatrix)
+        if (H.extract(list(range(k)), list(range(k))).det() == 0): return False
+    return True
+
 def testPoint (f: sp.Expr, g: List[sp.Expr], x: sp.Matrix, n: int, x0: List[float], u0: List[float], m: int = None) -> str:
     """ Tests a specific point of the lagrange function """
     if (m == None): m = len(g)
@@ -43,6 +50,7 @@ def testPoint (f: sp.Expr, g: List[sp.Expr], x: sp.Matrix, n: int, x0: List[floa
     # Check what kind of extrema x0 is.
     if (isMinimum(specificHessian, m, n) == True): return f"f atains a local minimum at {x0}, when restriced to candidate points."
     elif (isMaximum(specificHessian, m, n) == True): return f"f atains a local maximum at {x0}, when restriced to candidate points."
+    elif (isSaddlepoint(specificHessian, m, n) == True): return f"f has a local saddle point at {x0}, when restricted to candidate points." 
     else: return "Test was inconclusive"    
     
 if __name__ == "__main__":
