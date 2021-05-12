@@ -10,7 +10,7 @@ def borderedHessianMatrix (f: sp.Expr, g: List[sp.Expr], x: sp.Matrix, n: int, m
     # Setup the lagrange function
     L = f + sum([sp.Symbol(f"u{i}") * g[i] for i in range(m)])
     # NOTE: This is the other way around in this progam (because the order is important in the hessian matrix)
-    symbols = list(sp.symbols(" ".join(f"u{i}" for i in range(m)))) + [x[i] for i in range(n)]
+    symbols = [sp.Symbol(f"u{i}") for i in range(m)] + [x[i] for i in range(n)]
     
     # Compute the bordered hessian matrix
     H = sp.hessian(L, tuple(symbols))
