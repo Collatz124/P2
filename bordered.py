@@ -1,7 +1,7 @@
 # Martin Sig Nørbjerg ( 10/05/2021 )
 from typing import List, Tuple
 import sympy as sp
-from lagrange import insertSymbolsAndComputeValue
+from misc import insertSymbolsAndComputeValue
 
 def borderedHessianMatrix (f: sp.Expr, g: List[sp.Expr], x: sp.Matrix, n: int, m: int = None) -> Tuple[sp.Matrix, List[sp.Symbol]]:
     """ Computes the bordered-hessian matrix points of the lagranian """
@@ -54,13 +54,9 @@ def testPoint (f: sp.Expr, g: List[sp.Expr], x: sp.Matrix, n: int, x0: List[floa
     else: return "Test was inconclusive"    
     
 if __name__ == "__main__":
-    n = 3
+    n = 2
     x = sp.Matrix([sp.symbols(" ".join(["x" + str(i + 1) for i in range(n)]))])
-    f = x[0] * x[0] + x[1] * x[1] + x[2] * x[2]
-    g1 = x[0] * x[0] + x[1] * x[1] - x[2] * x[2]
-    g2 = x[0] - 2 * x[2] - 6
-    print(testPoint(f, [g1, g2], x, n, [-6, 0, -6], [-3, -24]))
-    print(testPoint(f, [g1, g2], x, n, [2, 0, -2], [-1 / 3, -8 / 3]))
-    # Output:
-    # f atains a local maximum at [-6, 0, -6], when restriced to candidate points.
-    # f atains a local minimum at [2, 0, -2], when restriced to candidate points.
+    f = 160 * x[0] + 250 * x[1] # Minimize this function
+    g1 = 20 * sp.sqrt(x[0]) * sp.sqrt(x[1]) - 1000 # Under this constraint
+    print(testPoint(f, [g1], x, n, [62.5, 40], [-20]))
+
