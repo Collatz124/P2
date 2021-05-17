@@ -48,15 +48,14 @@ def lagrange (f: sp.Expr, g: List[sp.Expr], x: sp.Matrix, n: int, m: int = None,
         gradientAtPoint = insertSymbolsAndComputeValue(gradient, symbols, point)
         
         # If gradient isn't a critical point perform more iterations 
-        for val in gradientAtPoint:
-            if (val != 0):
-                try:
-                    point = newtonRapson(gradient, point, symbols, n = n, m = m, iterations = numberOfIterations, negativeAllowed = allowNegative)
-                    gradientAtPoint = insertSymbolsAndComputeValue(gradient, symbols, point)
-                    break
-                
-                except ValueError:
-                    pass
+        if (isCloseToZeroVector(gradientAtPoint, threshHold = threshHold) == False):
+            try:
+                point = newtonRapson(gradient, point, symbols, n = n, m = m, iterations = numberOfIterations, negativeAllowed = allowNegative)
+                gradientAtPoint = insertSymbolsAndComputeValue(gradient, symbols, point)
+                break
+            
+            except ValueError:
+                pass
 
         # Check that the gradient is atleast similar to the 0 vector
         if (isCloseToZeroVector(gradientAtPoint, threshHold = threshHold) == True):
@@ -74,13 +73,13 @@ def lagrange (f: sp.Expr, g: List[sp.Expr], x: sp.Matrix, n: int, m: int = None,
                         break # This is needed otherwise the length will just increase by one and the loop will continue
 
                 
-    # Classify the points
+    # Classify the points (Here we assume that every point is in fact a critical point
+    #                      Even though we don't nessecarily know)
     classificationOfPoints = []
     for point in points:
         gradientAtPoint = insertSymbolsAndComputeValue(gradient, symbols, point)       
         classificationOfPoints.append(testPoint(f, g, x, n, point[:n], point[n:]))
 
-    
     return classificationOfPoints
 
 if (__name__ == "__main__"):
@@ -89,5 +88,6 @@ if (__name__ == "__main__"):
     f = 160 * x[0] + 250 * x[1] # Minimize this function
     g1 = 20 * sp.sqrt(x[0]) * sp.sqrt(x[1]) - 1000 # Under this constraint
     print(lagrange(f, [g1], x, n, allowNegative = False))
-    
-    
+    # Output
+    # found 13 candidate points.
+    # ['f atains a local minimum at [62.5000000000000, 40.0000000000000], when restriced to candidate points.']
