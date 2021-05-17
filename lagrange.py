@@ -12,12 +12,6 @@ def isCloseToZeroVector (vector: sp.Matrix, threshHold: float = 0.01) -> bool:
         if (val >= threshHold): return False
     return True
 
-def isZeroVector (vector: sp.Matrix) -> bool:
-    """ Checks if the vector is a zero vector """
-    for val in vector:
-        if (val != 0): return False
-    return True
-
 def lagrange (f: sp.Expr, g: List[sp.Expr], x: sp.Matrix, n: int, m: int = None, numberOfIterationPoints: int = 20, numberOfIterations: int = 10, allowNegative: bool = False, threshHold: float = 0.001) -> List[Tuple[float]]:
     """ Computes the critical points of the lagranian """
     if (m == None): m = len(g) # The number of constrains

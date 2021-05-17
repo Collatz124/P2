@@ -8,7 +8,6 @@ Created on Mon May 10 19:06:39 2021
 
 import numpy as np
 from scipy.optimize import minimize
-# from scipy.optimize.moduleTNC import minimize
 
 def objective(x):
     return -x[0]**2*x[1]**2
@@ -38,8 +37,6 @@ x0[1] = 1000.0
 print('Initial SSE Objective: ' + str(objective(x0)))
 
 # optimize
-#b = (1,5000)
-#bnds = (b, b)
 con1 = {'type': 'ineq', 'fun': constraint1} 
 con2 = {'type': 'ineq', 'fun': constraint2}
 con3 = {'type': 'ineq', 'fun': constraint3}
